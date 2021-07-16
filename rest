@@ -1,0 +1,6 @@
+@RestController = @Controller + @ResponseBody
+
+@GetMapping = @RequestMapping(method = RequestMethod.GET)
+
+@GetMapping(value="/", produces = MediaType.TEXT_PLAIN_VALUE)
+

@@ -1,0 +1,71 @@
+git --version
+
+git command -help
+git command --help
+git help --all
+
+SHIFT + G then q to exit from help.
+
+git config --global user.name "raja"
+git config --gloabl user.email "raja.muthukalai@gmail.com"
+
+git init
+
+git status
+git status --short
+
+
+git add index.html
+git add .
+git add --all | git add -A
+
+git commit -m "first commit"
+git commit -a -m "second commit"
+git commit --amend -m "amend the last commit"
+
+git log
+git log --oneline
+
+git branch
+git branch hello-world
+git branch -d hello-world // to delete the branch
+
+git checkout hello-world // checkout an existing branch
+git checkout -b hello-world // create a new branch and checkout
+
+git checkout master
+git merge hello-world
+master is source branch and hello-world is target branch
+
+in case of conflict, fix the conflicted files and commit again.
+
+touch .gitignore
+touch .git/info/exclude // it works the same way as .gitignore but are not shown to anyone else.
+
+ssh-keygen -t rsa -b 4096 -C "raja.muthukalai"
+ssh-add /Users/user/.ssh/id_rsa // add it to the SSH agent
+ssh -T git@github.com // test ssh connection to git hub repository
+
+git remote add ssh-origin git@github.com:w3schools-test/hello-world.git
+git remote set-url origin git@github.com:w3schools-test/hello-world.git
+
+revert is the command we use when we want to take a previous commit and add it as a new commit, keeping the log intact.
+git revert HEAD --no-edit // --no-edit to skip the commit message editor
+git revert HEAD~1 // revert to previous one commit
+git revert HEAD~2 // revert to previous two commits
+
+git reset 9a9add8
+
+
+
+
+
+
+
+
+
+
+
+
+
+

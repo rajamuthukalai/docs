@@ -1,0 +1,101 @@
+python
+
+# print reserved keywords
+help("keywords")
+# another way
+import keyword
+keyword.kwlist
+
+# data types
+int
+float
+complex
+
+int(10.6) => 10
+int("10") => 10
+int("10.6") => invalid syntax, cant use string representaion of float conversion
+int(False) ==> 0
+int(True) ==> 1
+
+
+10.0.is_integer() => True
+(10).bit_length( => 4)
+
+bool(0) => False
+bool(1) => True
+bool("") => False
+bool("a") => True
+bool([]) => False
+bool([1,2,3]) => True
+
+
+floot(9) = 9.0
+floor(complex(1,2)) - syntax error, you can convert from complex to float
+
+# floor value
+5 // 3 = 1
+
+# power value
+5 ** 3 = 125
+
+print('hi')
+print("hi") // semicolon is optinal
+
+# this is a comment
+var name = "hello"
+numbers = [1,2,3,4,5]
+
+len(name) => 5
+
+" ".join(['hello', 'world']) ==> hello world
+"raja".upper() => RAJA
+"RAJa".lower() => raja
+
+if expr:
+elif expr:
+else:
+
+for loop_var in iterable:
+    if break_condition;
+        break
+    if continue_condition:
+        continue_condition
+else:
+
+while expr:
+else:
+
+def function_name(arg1, arg2):
+return value
+
+# Numbers
+print(isinstance(var1, int))
+print(isinstance(var6, float))
+print(var1 < 35)
+print(var1 <= var6)
+
+# Strings
+print(isinstance(var2, str))
+print(var2[5] == "n" and var2[0] == "p")
+
+# Lists
+print(isinstance(var3, list))
+print(len(var3) == 5)
+
+# Tuples
+print(isinstance(var4, tuple))
+print(var4[2] == "Hello, Python!")
+
+# Dictionaries
+print(isinstance(var5, dict))
+print("happy" in var5)
+print(7 in var5.values())
+print(var5.get("egg") == "salad")
+print(len(var5) == 3)
+var5["tuna"] = "fish"
+print(len(var5) == 3)
+
+
+6jmk,exit()
+quit()
+ctrl + Z // to exit
