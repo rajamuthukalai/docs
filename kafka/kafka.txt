@@ -1,13 +1,13 @@
 # Windows
 
 # start zookeeper
-C:\install\kafka\bin\windows>zookeeper-server-start.bat ../../config/zookeeper.properties
+C:\install\kafka_2.13-3.2.0\bin\windows>zookeeper-server-start.bat ../../config/zookeeper.properties
 
 # start kafka server
-C:\install\kafka\bin\windows>kafka-server-start.bat ../../config/server.properties
+C:\install\kafka_2.13-3.2.0\bin\windows>kafka-server-start.bat ../../config/server.properties
 
 # create topic
-C:\install\kafka\bin\windows>kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic customer
+C:\install\kafka_2.13-3.2.0\windows>kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic customer
 
 # start consumer
-C:\install\kafka\bin\windows>kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic customer --from-beginning
+C:\install\kafka_2.13-3.2.0\windows>kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic customer --latest
