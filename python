@@ -96,6 +96,6 @@ var5["tuna"] = "fish"
 print(len(var5) == 3)
 
 
-6jmk,exit()
+exit()
 quit()
-ctrl + Z // to exit
+ctrl + Z # to exit
