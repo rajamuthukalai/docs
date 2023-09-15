@@ -1,0 +1,8 @@
+Nodejs is an open source, cross platform javascript runtime environment.
+
+> node
+> 3+3
+6
+ctl + D to exit
+
+> node first.js // ro 

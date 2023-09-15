@@ -56,6 +56,22 @@ git revert HEAD~2 // revert to previous two commits
 
 git reset 9a9add8
 
+### to squash merge commits
+
+base branch: develop
+feature branch: feature/US1234 (contains merge commits)
+
+git checkout develop
+
+git checkout -b temp
+git merge --squash feature/US1234
+git commit
+
+git checkout feature/US1234
+git reset --hard temp
+git push -f
+
+
 
 
 

@@ -2,30 +2,28 @@ alias k=kubectl
 echo 'alias k=kubectl' >> ~/.bashrc
 
 kubectl -h # help
-kubectl logs -l name=<lable-name>
 
-Cluster Management
+Cluster Management:
 
 kubectl cluster-info
 kubectl version
 kubectl config view
 kubectl config current-context
 kubectl config get-contexts
-kubectl config use-context <cluster> # set the default context
+kubectl config use-context <cluster-name> # set the default context
 kubectl api-resources
 kubectl api-versions
 kubectl get all --all-namespaces
 
 Namespace:
 
+kubectl get namespaces
 kubectl get namespace <namespace-name>
 kubectl describe/create/edit/delete namespace <namespace-name>
-kubectl top namespace <namespace-name>
 
 Node:
 
 kubectl get node
-kubectl label node
 kubectl describe node <node-name>
 kubectl delete node <node-name>
 kubectl top node <node-name>
@@ -33,6 +31,7 @@ kubectl describe nodes | grep Allocated -A 5
 kubectl get pods -o wide | grep <node-name>
 kubectl annotate node <node-name>
 kubectl taint node <node-name> # to taint node
+kubectl taint node node01 a=b:NoSchedule
 kubectl drain node <node-name> # to prepare it for maintenance
 kubectl cordon node <node-name> # make it unschedulable
 kubectl uncordon node <node-name> # make it schedulable
@@ -45,7 +44,10 @@ kubectl get pods -o=yaml
 kubectl get pods -o=wide
 kubectl get pod -n=<namespace>
 kubectl get pod --namespace=<namespace>
-kubectl get pods --show-labels
+kubectl get pods --show-labels=true
+kubectl get pods --selector env=name
+kubectl get pods --selector env=name --no-headers | wc -l
+kubectl get pods --selector env=name,tier=frontend
 kubectl get pods --field-selector=status.phase=Running
 kubectl create -f ./pod.json
 kubectl describe/create/edit/delete pod <pod-name>
@@ -64,6 +66,7 @@ kubectl describe/create/edit/delete deployment <deployment-name>
 kubectl rollout status deployment <deployment-name>
 kubectl rollout undo deployment <deployment-name>
 kubectl set image deployment/<deployment-name> <container-name>=image:<new-image-version>
+kubectl rollout restart deployment/<deployment-name>
 kubectl replace --force -f ./deployment.yaml
 
 Replication Controller:
@@ -105,6 +108,7 @@ kubectl edit services
 Service Accounts:
 
 kubectl get serviceaccounts
+kubectl get serviceaccounts --all-namespaces
 kubectl describe serviceaccounts
 kubectl replace serviceaccount
 kubectl delete serviceaccount <serviceaccount>
@@ -127,5 +131,95 @@ kubectl logs --tail=50 <pod-name> # recent 50 lines
 kubectl logs -f <pod-name> # print logs and follow new logs
 kubectl logs -c <container-name> <pod-name> # container logs
 kubectl logs -f <service-name> -c <container-name> # container logs
+kubectl logs -l name=<lable-name>
+
+troubleshooting:
+
+kubectl get nodes
+kubectl get pods
+kubectl get pods -n kube-system
+service kube-apiserver status
+service kube-Controller-manager status
+service kube-scheduler status
+service kubelet status
+service kube-proxy status
+kubectl logs kube-apiserver-master -n kube-system
+sudo journalctl -u kube-apiserver
+
+upgrade:
+
+# On the controlplane node:
+
+kubectl drain controlplane --ignore-daemonsets
+apt update
+apt-get install kubeadm=1.27.0-00
+kubeadm upgrade plan v1.27.0
+kubeadm upgrade apply v1.27.0
+apt-get install kubelet=1.27.0-00
+systemctl daemon-reload
+systemctl restart kubelet
+kubectl uncordon controlplane
+
+# Before draining node01, we need to remove the taint from the controlplane node.
+
+# Identify the taint first. 
+root@controlplane:~# kubectl describe node controlplane | grep -i taint
+
+# Remove the taint with help of "kubectl taint" command.
+root@controlplane:~# kubectl taint node controlplane node-role.kubernetes.io/control-plane:NoSchedule-
+
+# Verify it, the taint has been removed successfully.  
+root@controlplane:~# kubectl describe node controlplane | grep -i taint
+
+# Now, drain the node01 as follows: -
+
+root@controlplane:~# kubectl drain node01 --ignore-daemonsets
+
+To exit from the specific node, type exit or logout on the terminal.
+
+# Back on the controlplane node: -
+
+root@controlplane:~# kubectl uncordon node01
+root@controlplane:~# kubectl get pods -o wide | grep gold (make sure this is scheduled on a node)
+
+another question:
+
+kubectl -n admin2406 get deployment -o custom-columns=DEPLOYMENT:.metadata.name,CONTAINER_IMAGE:.spec.template.spec.containers[].image,READY_REPLICAS:.status.readyReplicas,NAMESPACE:.metadata.namespace --sort-by=.metadata.name > /opt/admin2406_data
+
+kubectl cluster-info --kubeconfig /root/CKA/admin.kubeconfig
+
+kubectl create deployment  nginx-deploy --image=nginx:1.16
+
+kubectl set image deployment/nginx-deploy nginx=nginx:1.17 --record
+
+export ETCDCTL_API=3
+etcdctl snapshot save --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key --endpoints=127.0.0.1:2379 /opt/etcd-backup.db
 
 
+kubectl run secret-1401 -n admin1401 --image=busybox --dry-run=client -oyaml --command -- sleep 4800 > admin.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: secret-1401
+  name: secret-1401
+  namespace: admin1401
+spec:
+  volumes:
+  - name: secret-volume
+    # secret volume
+    secret:
+      secretName: dotfile-secret
+  containers:
+  - command:
+    - sleep
+    - "4800"
+    image: busybox
+    name: secret-admin
+    # volumes' mount path
+    volumeMounts:
+    - name: secret-volume
+      readOnly: true
+      mountPath: "/etc/secret-volume"
