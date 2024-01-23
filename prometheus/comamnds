@@ -1,7 +1,0 @@
-sudo useradd --no-create-home --shell /bin/false promotheus
-sudo mkdir /etc/promotheus
-sudo mkdir /var/lib/promotheus
-
-sudo chown promotheus:promotheus /etc/promotheus
-sudo chown promotheus:promotheus /var/lib/promotheus
-
