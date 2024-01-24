@@ -1,0 +1,7 @@
+SSH harneding - restrict root login and password authentication
+
+vi /etc/ssh/sshd_config
+PermitRootLogin no
+PasswordAuthentication no
+
+systemctl reload sshd

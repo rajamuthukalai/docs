@@ -1,0 +1,14 @@
+ufw status
+
+ufw default allow outgoing
+
+ufw default deny incoming
+
+ufw allow from 172.16.238.5 to any port 22 proto tcp
+
+ufw deny 8080
+
+ufw enable
+
+ufw delete 5
+
