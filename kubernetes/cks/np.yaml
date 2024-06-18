@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: np-restriction
+  namespace: moon
+spec:
+  podSelector: 
+    matchLabels:
+      run: nginx-pod
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          namespace: hello
+    - podSelector:
+        matchLabels:
+          app: backend
+      namespaceSelector: {}
+  policyTypes:
+  - Ingress

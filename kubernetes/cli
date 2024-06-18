@@ -54,7 +54,7 @@ kubectl describe/create/edit/delete pod <pod-name>
 kubectl label pod <pod-name>
 kubectl annotate pod <pod-name> <annotation>
 kubectl exec <pod-name> -c <container-name> <command> # to run a command on a container inside a pod
-kubectl exec -it <pod-name> /bin/sh # open an interactive shell
+kubectl exec -it <pod-name> -- /bin/sh # open an interactive shell
 kubectl exec <pod-name> -- cat /log/app.log
 kubectl replace --force -f ./pod-definition.yaml
 kubectl port-forward <pod-name> <listen-port>:<forward-port>
@@ -65,7 +65,7 @@ kubectl get deployment
 kubectl describe/create/edit/delete deployment <deployment-name>
 kubectl rollout status deployment <deployment-name>
 kubectl rollout undo deployment <deployment-name>
-kubectl set image deployment/<deployment-name> <container-name>=image:<new-image-version>
+kubectl set image deployment/<deployment-name> <container-name>=<new-image-name>:<new-image-version>
 kubectl rollout restart deployment/<deployment-name>
 kubectl replace --force -f ./deployment.yaml
 

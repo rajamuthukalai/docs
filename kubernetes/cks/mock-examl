@@ -1,0 +1,4 @@
+k get pods -n prod -o yaml custom-columns="POD:.metadata.name,IMAGE:.spec.containers[*].name"
+
+trivy image --severity CRITICAL --severity HIGH nginx | grep -E "CRITICAL:|HIGH:"
+
