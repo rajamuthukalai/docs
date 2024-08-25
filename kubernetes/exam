@@ -1,0 +1,51 @@
+alias k=kubectl
+export do="--dry-run=client -o yaml"
+export now="--force --grace-period 0"
+
+scp /opt/course/9/profile cluster1-node1:~/
+scp <source file> <target-node-name:~/>
+
+k config get-contexts
+k config get-contexts -o name
+k config view -o jsonpath="{.contexts[*].name}" | tr " " "\n" > /opt/course/1/contexts
+k config view --raw
+k config view --raw -ojsonpath="{.users[2].user.client-certificate-data}" | base64 -d > /opt/course/1/cert
+
+systemctl status falco
+cat /var/log/syslog | grep falco
+
+crictl ps -id 7a5ea6a080d1
+crictl pods -id 7a5ea6a080d1
+
+kube-bench run --targets=master
+kube-bench run --targets=node
+
+k get crd
+k get constraint
+edit blacklistimages pod-trusted-images
+k edit constrainttemplates blacklistimages
+
+apparmor_parser -q ./profile
+apparmor_status
+
+k label node cluster1-node1 security=apparmor
+
+runsc --version
+cat /etc/containerd/config.toml | grep runsc
+
+etcdctl
+cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep etcd
+
+➜ root@cluster1-controlplane1:~# ETCDCTL_API=3 etcdctl \
+--cert /etc/kubernetes/pki/apiserver-etcd-client.crt \
+--key /etc/kubernetes/pki/apiserver-etcd-client.key \
+--cacert /etc/kubernetes/pki/etcd/ca.crt get /registry/secrets/team-green/database-access
+
+ETCD in Kubernetes stores data under /registry/{type}/{namespace}/{name}  
+
+echo Y29uZmlkZW50aWFs | base64 -d > /opt/course/11/database-password
+
+/ # curl https://kubernetes.default/api/v1/namespaces/restricted/secrets -H "Authorization: Bearer $(cat /run/secrets/kubernetes.io/serviceaccount/token)" -k
+
+
+
